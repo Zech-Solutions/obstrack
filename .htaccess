@@ -1,0 +1,7 @@
+RewriteEngine On
+RewriteBase /basic-mvc/public/
+
+# Redirect all requests that are not actual files or directories to index.php
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [L]
