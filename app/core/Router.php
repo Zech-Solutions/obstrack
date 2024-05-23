@@ -2,30 +2,61 @@
 
 class Router
 {
-    private $routes = [];
+    protected $routes = [];
 
-    public function get($uri, $controller)
+    public function get($route, $controller)
     {
-        $this->routes['GET'][$uri] = $controller;
+        $this->addRoute('GET', $route, $controller);
     }
 
-    public function post($uri, $controller)
+    public function post($route, $controller)
     {
-        $this->routes['POST'][$uri] = $controller;
+        $this->addRoute('POST', $route, $controller);
+    }
+
+    public function put($route, $controller)
+    {
+        $this->addRoute('PUT', $route, $controller);
+    }
+
+    public function delete($route, $controller)
+    {
+        $this->addRoute('DELETE', $route, $controller);
+    }
+
+    protected function addRoute($method, $route, $controller)
+    {
+        $this->routes[$method][$route] = $controller;
     }
 
     public function dispatch()
     {
         $uri = $this->getUri() ?? "home";
         $method = $_SERVER['REQUEST_METHOD'];
+        $routeFound = false;
 
-        if (isset($this->routes[$method][$uri])) {
+        foreach ($this->routes[$method] as $route => $controller) {
+            $pattern = preg_replace('/\{[^\}]+\}/', '([^/]+)', $route);
+            if (preg_match("#^$pattern$#", $uri, $matches)) {
+                array_shift($matches);
+                $routeFound = true;
+                $_controller = explode("@", $controller);
+                $this->callControllerMethod(
+                    $_controller[0],
+                    $_controller[1],
+                    $matches
+                );
+                break;
+            }
+        }
+
+        if (!$routeFound) {
             $this->callControllerMethod(
-                ...explode('@', $this->routes[$method][$uri])
+                "RootController",
+                "notFound"
             );
-        } else {
-            http_response_code(404);
-            echo "404 Not Found";
+            // http_response_code(404);
+            // echo "404 Not Found";
         }
     }
 
@@ -37,10 +68,10 @@ class Router
         return $uri == '' ? '' : $uri;
     }
 
-    private function callControllerMethod($controller, $method)
+    protected function callControllerMethod($controller, $method, $parameters = [])
     {
-        require_once '../app/controllers/' . $controller . '.php';
-        $controller = new $controller();
-        call_user_func([$controller, $method]);
+        require_once __DIR__ . "/../controllers/$controller.php";
+        $controller = new $controller;
+        call_user_func_array([$controller, $method], $parameters);
     }
 }

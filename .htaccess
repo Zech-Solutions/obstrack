@@ -1,5 +1,5 @@
 RewriteEngine On
-RewriteBase /basic-mvc/public/
+RewriteBase /obstrack/public/
 
 # Redirect all requests that are not actual files or directories to index.php
 RewriteCond %{REQUEST_FILENAME} !-d
