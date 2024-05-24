@@ -8,24 +8,50 @@
     ?>
         <div class="card mt-2 mb-2">
             <div class="card-header d-flex align-items-center">
-                <img class="user-img rounded-circle" src="https://via.placeholder.com/50x50&text=J">
+                <img class="user-img rounded-circle" src="https://via.placeholder.com/50x50&text=U">
                 <div class="ml-3">
-                    <h4><?= $row['reported_by'] ?></h4>
+                    <h4><?= $row['is_anonymous'] ? "Anonymous" : $row['user']['first_name'] ?></h4>
                     <span><?= $row['created_at'] ?></span>
-                    <badge class="badge badge-success"><?= $row['status'] ?></badge>
+                    <span class="badge badge-success"><?= $row['status'] ?></span>
                 </div>
+                <?php if ($row['status'] != 'COMPLETED' && $_SESSION[SYSTEM]['role'] != 'USER') { ?>
+                    <div class="ml-auto">
+                        <a href="#" class="btn btn-secondary btn-sm"><span class="fas fa-camera"></span> Take Action</a>
+                    </div>
+                <?php } ?>
             </div>
             <div class="card-body">
-                <p class="card-text"><?=$row['detail']?></p>
+                <p class="card-text"><?= $row['detail'] ?></p>
                 <p class="card-text"><strong><span class="fas fa-map-marker"></span></strong> sad</p>
-                <div>
-                    <?php
-                    foreach ($images as $count => $image) {
-                    ?>
-                        <image class="preview-image" src="<?= URL_PUBLIC . '/images/obstructions/' . $image ?>"></image>
-                    <?php } ?>
+                <!-- Tabs -->
+                <ul class="nav nav-tabs mt-3" id="myTab<?= $row['obstruction_id'] ?>" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="before-tab<?= $row['obstruction_id'] ?>" data-toggle="tab" href="#before<?= $row['obstruction_id'] ?>" role="tab" aria-controls="before" aria-selected="true"><span class="fas fa-camera"> </span> BEFORE</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="during-tab<?= $row['obstruction_id'] ?>" data-toggle="tab" href="#during<?= $row['obstruction_id'] ?>" role="tab" aria-controls="during" aria-selected="false"><span class="fas fa-spinner"> </span> WIP </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="after-tab<?= $row['obstruction_id'] ?>" data-toggle="tab" href="#after<?= $row['obstruction_id'] ?>" role="tab" aria-controls="after" aria-selected="false"><span class="fas fa-check"></span> COMPLETED</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent<?= $row['obstruction_id'] ?>">
+                    <div class="tab-pane fade show active" id="before<?= $row['obstruction_id'] ?>" role="tabpanel" aria-labelledby="before-tab<?= $row['obstruction_id'] ?>">
+                        <div class="p-2">
+                            <?php
+                            foreach ($images as $count => $image) {
+                            ?>
+                                <image class="preview-image" src="<?= URL_PUBLIC . '/images/obstructions/' . $image ?>"></image>
+                            <?php } ?>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="during<?= $row['obstruction_id'] ?>" role="tabpanel" aria-labelledby="during-tab<?= $row['obstruction_id'] ?>">
+                        <p>Content for DURING</p>
+                    </div>
+                    <div class="tab-pane fade" id="after<?= $row['obstruction_id'] ?>" role="tabpanel" aria-labelledby="after-tab<?= $row['obstruction_id'] ?>">
+                        <p>Content for AFTER</p>
+                    </div>
                 </div>
-                <a href="#" class="btn btn-primary mt-2">View Report</a>
             </div>
         </div>
     <?php } ?>

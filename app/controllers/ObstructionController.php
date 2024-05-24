@@ -12,7 +12,10 @@ class ObstructionController extends Controller
 
     public function index()
     {
-        $obstructions = $this->obstruction->all();
+        $obstructions = $this->obstruction->all(['user']);
+        // echo json_encode($this->session('user_id'));
+        // echo json_encode($obstructions);
+        // die;
         $this->view('obstruction/index', [
             'obstructions' => $obstructions
         ]);
@@ -39,6 +42,7 @@ class ObstructionController extends Controller
             'reported_by' => $this->session('user_id'),
             'images' => json_encode($images),
             'detail' => $this->input('detail'),
+            'is_anonymous' => $this->input('is_anonymous') == 'on' ? 1 : 0
         ];
 
         if ($this->obstruction->add($form)) {

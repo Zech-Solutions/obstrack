@@ -8,6 +8,11 @@
         </div>
         <div class="card-body">
             <form action="<?= URL_PUBLIC ?>/obstructions/store" method="POST" enctype="multipart/form-data">
+                <div class="form-group checkbox">
+                    <input type="checkbox" name="is_anonymous" id="report-is-anonymous">
+                    <label for="report-is-anonymous">Anonymous Report</label>
+                </div>
+
                 <div class="form-group">
                     <label for="obstruction_type">Obstruction Type</label>
                     <select class="form-control" id="obstruction_type" name="obstruction_type_id">
