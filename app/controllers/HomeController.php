@@ -2,16 +2,16 @@
 
 class HomeController extends Controller
 {
+    private $obstruction;
+    public function __construct()
+    {
+        $this->obstruction = $this->model("Obstruction");
+    }
     public function index()
     {
-        $this->view('home', []);
-    }
-
-    public function show($id, $old)
-    {
-        $this->view('home/show', [
-            'id' => $id,
-            'old_id' => $old
+        $report_data = $this->obstruction->countHomeData();
+        $this->view('home/index', [
+            'report_data' => $report_data
         ]);
     }
 }

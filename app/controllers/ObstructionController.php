@@ -3,16 +3,26 @@
 class ObstructionController extends Controller
 {
     private $obstructionType;
+    private $obstructionAction;
+    private $obstructionRequest;
     private $obstruction;
+    private $brgy;
     public function __construct()
     {
         $this->obstructionType = $this->model("ObstructionType");
+        $this->obstructionAction = $this->model("ObstructionAction");
+        $this->obstructionRequest = $this->model("ObstructionRequest");
         $this->obstruction = $this->model("Obstruction");
+        $this->brgy = $this->model("Barangay");
     }
 
     public function index()
     {
-        $obstructions = $this->obstruction->all(['user']);
+        $where = [];
+        if ($_SESSION[SYSTEM]['role'] == 'ADMIN') {
+            $where = ['brgy_id' => $this->session('brgy_id')];
+        }
+        $obstructions = $this->obstruction->all(['user', 'actions', 'obstruction_type', 'brgy'], $where);
         // echo json_encode($this->session('user_id'));
         // echo json_encode($obstructions);
         // die;
@@ -21,16 +31,65 @@ class ObstructionController extends Controller
         ]);
     }
 
+    public function indexRequest()
+    {
+        $where = [];
+        $requests = $this->obstructionRequest->all(['brgy']);
+        // echo json_encode($this->session('user_id'));
+        // echo json_encode($obstructions);
+        // die;
+        $this->view('obstruction/index-request', [
+            'requests' => $requests
+        ]);
+    }
+
+
     public function create()
     {
         if ($_SESSION[SYSTEM]['role'] == 'USER') {
             $obstruction_types = $this->obstructionType->all();
+            $brgys = $this->brgy->all();
 
             $this->view('obstruction/create', [
-                'obstruction_types' => $obstruction_types
+                'obstruction_types' => $obstruction_types,
+                'brgys' => $brgys
             ]);
         } else {
-            $this->view('obstruction/index', []);
+            $this->view('403/index', []);
+        }
+    }
+
+    public function action($obstruction_id)
+    {
+        if ($_SESSION[SYSTEM]['role'] != 'USER') {
+            $obstruction = $this->obstruction->find($obstruction_id);
+            if ($obstruction) {
+                $this->view('obstruction/action', [
+                    'obstruction' => $obstruction
+                ]);
+            } else {
+                $this->view('404/index', []);
+            }
+        } else {
+            $this->view('403/index', []);
+        }
+    }
+
+    public function request($obstruction_id)
+    {
+        if ($_SESSION[SYSTEM]['role'] != 'ADMIN') {
+            $obstruction = $this->obstruction->find($obstruction_id, ['user']);
+            $request = $this->obstructionRequest->findByObstructionId($obstruction_id);
+            if ($obstruction) {
+                $this->view('obstruction/request', [
+                    'obstruction' => $obstruction,
+                    'request' => $request
+                ]);
+            } else {
+                $this->view('404/index', []);
+            }
+        } else {
+            $this->view('403/index', []);
         }
     }
 
@@ -39,9 +98,11 @@ class ObstructionController extends Controller
         $images = $this->processReportImages();
         $form = [
             'obstruction_type_id' => $this->input('obstruction_type_id'),
+            'brgy_id' => $this->input('brgy_id'),
             'reported_by' => $this->session('user_id'),
             'images' => json_encode($images),
             'detail' => $this->input('detail'),
+            'location' => $this->input('location') ?? "[]",
             'is_anonymous' => $this->input('is_anonymous') == 'on' ? 1 : 0
         ];
 
@@ -52,6 +113,76 @@ class ObstructionController extends Controller
         }
 
         $this->redirect('obstructions');
+    }
+
+    public function storeAction()
+    {
+        $images = $this->processReportImages();
+        $form = [
+            'obstruction_id' => $this->input('obstruction_id'),
+            'actioned_by' => $this->session('user_id'),
+            'images' => json_encode($images),
+            'detail' => $this->input('detail'),
+            'status' => $this->input('status')
+        ];
+
+        if ($this->obstructionAction->add($form)) {
+            $this->session_put('success', 'Successfully taken action');
+            $form = [
+                'status' => $this->input('status')
+            ];
+            $this->obstruction->edit($form, $this->input('obstruction_id'));
+        } else {
+            $this->session_put('error', 'Error while reporting');
+        }
+
+        $this->redirect('obstructions');
+    }
+
+    public function storeRequest()
+    {
+        $images = $this->processReportImages();
+        $form = [
+            'obstruction_id' => $this->input('obstruction_id'),
+            'request_by' => $this->session('user_id'),
+            'brgy_id' => $this->session('brgy_id'),
+            'files' => json_encode($images),
+            'message' => $this->input('message')
+        ];
+
+        if ($this->obstructionRequest->add($form)) {
+            $this->session_put('success', 'Successfully requested permission');
+        } else {
+            $this->session_put('error', 'Error while reporting');
+        }
+
+        $this->redirect('obstructions');
+    }
+
+    public function updateRequest()
+    {
+        $request_id = $this->input('request_id');
+        $obstruction_id = $this->input('obstruction_id');
+        $status = $this->input('status');
+        $form = [
+            'status' => $status,
+            'approved_by' => $this->session('user_id'),
+        ];
+
+        if ($this->obstructionRequest->edit($form, $request_id)) {
+            $this->session_put('success', 'Successfully requested permission');
+            $form = [
+                'approval_status' => $status
+            ];
+            if ($status == 'REJECTED') {
+                $form['status'] = 'REJECTED';
+            }
+            $this->obstruction->edit($form, $obstruction_id);
+        } else {
+            $this->session_put('error', 'Error while reporting');
+        }
+
+        // $this->redirect('obstructions');
     }
 
     public function processReportImages()

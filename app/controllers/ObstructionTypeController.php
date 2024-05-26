@@ -17,10 +17,10 @@ class ObstructionTypeController extends Controller
 
     public function create()
     {
-        if ($_SESSION[SYSTEM]['role'] == 'USER') {
+        if ($_SESSION[SYSTEM]['role'] != 'USER') {
             $this->view('obstruction-type/create', []);
         } else {
-            $this->view('obstruction/index', []);
+            $this->view('403/index', []);
         }
     }
 
@@ -45,6 +45,19 @@ class ObstructionTypeController extends Controller
             $this->session_put('success', 'Successfully added');
         } else {
             $this->session_put('error', 'Adding failed');
+        }
+        $this->redirect('obstruction-types');
+    }
+
+    public function destroy()
+    {
+        $obstruction_type_id = $this->input('obstruction_type_id');
+        var_dump($obstruction_type_id);
+        die;
+        if ($this->obstructionType->remove($obstruction_type_id)) {
+            $this->session_put('success', 'Successfully deleted');
+        } else {
+            $this->session_put('error', 'Deletion failed');
         }
         $this->redirect('obstruction-types');
     }

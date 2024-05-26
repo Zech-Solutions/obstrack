@@ -11,7 +11,7 @@
     <script>
         const URL_PUBLIC = "<?= URL_PUBLIC ?>";
     </script>
-    <script src="<?= URL_PUBLIC ?>/js/main.js" defer></script>
+    <!-- <script src="<?= URL_PUBLIC ?>/js/main.js" defer></script> -->
     <style>
         .navbar-custom {
             background-color: #4CAF50;
@@ -29,30 +29,44 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= URL_PUBLIC ?>/home"><span class="fas fa-home"></span> Home</a>
+                    <a class="nav-link" href="<?= URL_PUBLIC ?>/home"><span class="fas fa-home"></span> Dashboard</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="manageDataDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="fas fa-edit"></span> Manage Data
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="manageDataDropdown">
-                        <a class="dropdown-item" href="<?= URL_PUBLIC ?>/departments">Departments</a>
-                        <a class="dropdown-item" href="<?= URL_PUBLIC ?>/obstruction-types">Obstruction Types</a>
-                        <a class="dropdown-item" href="<?= URL_PUBLIC ?>/users">Users</a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= URL_PUBLIC ?>/obstructions"><span class="fas fa-road"></span> Obstructions</a>
-                </li>
+                <?php if (in_array($_SESSION[SYSTEM]['role'], ['ROOT', 'ADMIN'])) { ?>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="manageDataDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="fas fa-edit"></span> Manage Data
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="manageDataDropdown">
+                            <!-- <a class="dropdown-item" href="<?= URL_PUBLIC ?>/departments">Departments</a> -->
+                            <a class="dropdown-item" href="<?= URL_PUBLIC ?>/obstruction-types">Obstruction Types</a>
+                            <a class="dropdown-item" href="<?= URL_PUBLIC ?>/brgys">Barangays</a>
+                            <a class="dropdown-item" href="<?= URL_PUBLIC ?>/users">Users</a>
+                        </div>
+                    </li>
+                <?php } ?>
+                <?php if ($_SESSION[SYSTEM]['role'] != 'DILG') { ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= URL_PUBLIC ?>/obstructions"><span class="fas fa-road"></span> Obstructions</a>
+                    </li>
+                <?php } ?>
+                <?php if ($_SESSION[SYSTEM]['role'] == 'DILG') { ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= URL_PUBLIC ?>/obstructions/requests"><span class="fas fa-file"></span> Requests</a>
+                    </li>
+                <?php } ?>
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <?= $_SESSION[SYSTEM]['first_name'] ?>
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="profileDropdown">
-                        <a class="dropdown-item" href="<?= URL_PUBLIC ?>/profile"><span class="fas fa-user"></span> Profile</a>
-                        <a class="dropdown-item" href="<?= URL_PUBLIC ?>/logout"><span class="fas fa-sign-out-alt"></span> Logout</a>
+                    <div class="container">
+                        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                            <img class="user-img rounded-circle" src="<?= URL_PUBLIC ?>/images/users/default.png" alt="default" width="30" height="30">
+                            <span><?= $_SESSION[SYSTEM]['first_name'] . " " . $_SESSION[SYSTEM]['middle_name'] . " " . $_SESSION[SYSTEM]['last_name'] ?></span>
+                        </a>
+                        <div class="dropdown-menu mr-auto" aria-labelledby="profileDropdown">
+                            <a class="dropdown-item" href="<?= URL_PUBLIC ?>/profile"><span class="fas fa-user"></span> Profile</a>
+                            <a class="dropdown-item" href="<?= URL_PUBLIC ?>/logout"><span class="fas fa-sign-out-alt"></span> Logout</a>
+                        </div>
                     </div>
                 </li>
             </ul>

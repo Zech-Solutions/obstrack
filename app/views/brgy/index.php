@@ -1,6 +1,6 @@
 <?php
-$title = "Users Page";
-$view = '../app/views/user/layout/index.php';
+$title = "Barangays Page";
+$view = '../app/views/brgy/layout/index.php';
 $badge_success = '';
 if (isset($_SESSION[SYSTEM]['success'])) {
     $badge_success = "<badge class='alert alert-success col-md-6'>" . $_SESSION[SYSTEM]['success'] . "</badge>";

@@ -4,6 +4,18 @@ require_once 'app/globals.php';
 if (isset($_SESSION[SYSTEM]['user_id'])) {
     header("Location: " . URL_PUBLIC);
 }
+
+$badge_success = '';
+if (isset($_SESSION[SYSTEM]['success'])) {
+    $badge_success = "<badge class='alert alert-success row'>" . $_SESSION[SYSTEM]['success'] . "</badge>";
+}
+$badge_error = '';
+if (isset($_SESSION[SYSTEM]['error'])) {
+    $badge_error = "<badge class='alert alert-danger row'>" . $_SESSION[SYSTEM]['error'] . "</badge>";
+}
+
+unset($_SESSION[SYSTEM]['error']);
+unset($_SESSION[SYSTEM]['success']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +25,7 @@ if (isset($_SESSION[SYSTEM]['user_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup & Login Form</title>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="<?=URL_PUBLIC?>/vendor/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="<?= URL_PUBLIC ?>/vendor/bootstrap/bootstrap.min.css">
     <style>
         .form-container {
             display: flex;
@@ -112,11 +124,15 @@ if (isset($_SESSION[SYSTEM]['user_id'])) {
                     <h2>Login</h2>
                     <div class="form-group">
                         <label for="login-username">Username</label>
-                        <input type="text" class="form-control" id="login-username" placeholder="Enter username" name="username">
+                        <input type="text" class="form-control" id="login-username" placeholder="Enter username" name="username" required>
                     </div>
                     <div class="form-group">
                         <label for="login-password">Password</label>
-                        <input type="password" class="form-control" id="login-password" placeholder="Password" name="password">
+                        <input type="password" class="form-control" id="login-password" placeholder="Password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <?=$badge_error?>
+                        <?=$badge_success?>
                     </div>
                     <div class="form-group form-check">
                         <input type="checkbox" class="form-check-input" id="login-remember">
@@ -132,7 +148,7 @@ if (isset($_SESSION[SYSTEM]['user_id'])) {
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="signup-firstname">First Name</label>
-                            <input type="text" class="form-control" id="signup-firstname" placeholder="Enter first name" name="first_name">
+                            <input type="text" class="form-control" id="signup-firstname" placeholder="Enter first name" name="first_name" required>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="signup-middlename">Middle Name</label>
@@ -140,17 +156,17 @@ if (isset($_SESSION[SYSTEM]['user_id'])) {
                         </div>
                         <div class="form-group col-md-4">
                             <label for="signup-lastname">Last Name</label>
-                            <input type="text" class="form-control" id="signup-lastname" placeholder="Enter last name" name="last_name">
+                            <input type="text" class="form-control" id="signup-lastname" placeholder="Enter last name" name="last_name" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="signup-birthdate">Birthdate</label>
-                            <input type="date" class="form-control" id="signup-birthdate" name="dob">
+                            <input type="date" class="form-control" id="signup-birthdate" name="dob" max="<?=date('Y-m-d')?>" required>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="signup-gender">Gender</label>
-                            <select class="form-control" id="signup-gender" name="gender">
+                            <select class="form-control" id="signup-gender" name="gender" required>
                                 <option value="" disabled selected>Select gender</option>
                                 <option value="M">Male</option>
                                 <option value="F">Female</option>
@@ -159,15 +175,15 @@ if (isset($_SESSION[SYSTEM]['user_id'])) {
                     </div>
                     <div class="form-group">
                         <label for="signup-address">Address</label>
-                        <textarea class="form-control" id="signup-address" placeholder="Enter address" rows="2" name="address"></textarea>
+                        <textarea class="form-control" id="signup-address" placeholder="Enter address" rows="2" name="address" required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="signup-username">Username</label>
-                        <input type="text" class="form-control" id="signup-username" placeholder="Enter username" name="username">
+                        <input type="text" class="form-control" id="signup-username" placeholder="Enter username" name="username" required>
                     </div>
                     <div class="form-group">
                         <label for="signup-password">Password</label>
-                        <input type="password" class="form-control" id="signup-password" placeholder="Password" name="password">
+                        <input type="password" class="form-control" id="signup-password" placeholder="Password" name="password" required>
                     </div>
                     <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
                     <p class="mt-3">Already have an account? <a href="#" onclick="toggleForm()">Log In</a></p>
@@ -182,9 +198,9 @@ if (isset($_SESSION[SYSTEM]['user_id'])) {
     <!-- Font Awesome for social icons -->
     <!-- <script src="https://kit.fontawesome.com/a076d05399.js"></script> -->
     <!-- Bootstrap JS and jQuery -->
-    <script src="<?=URL_PUBLIC?>/vendor/jquery/jquery.min.js"></script>
-    <script src="<?=URL_PUBLIC?>/vendor/popper/popper.min.js"></script>
-    <script src="<?=URL_PUBLIC?>/vendor/bootstrap/bootstrap.min.js"></script>
+    <script src="<?= URL_PUBLIC ?>/vendor/jquery/jquery.min.js"></script>
+    <script src="<?= URL_PUBLIC ?>/vendor/popper/popper.min.js"></script>
+    <script src="<?= URL_PUBLIC ?>/vendor/bootstrap/bootstrap.min.js"></script>
 
     <script>
         function toggleForm() {

@@ -10,6 +10,12 @@ class User extends Model
         $users = $this->select($this->table_name);
         return $users;
     }
+    
+    public function usernameExists($username)
+    {
+        $data = $this->select($this->table_name, '*', ['username' => $username]);
+        return $data;
+    }
 
     public function register($form)
     {

@@ -27,6 +27,12 @@ class Controller
         exit;
     }
 
+    public function redirectLogin()
+    {
+        header("Location: " . URL);
+        exit;
+    }
+
     public function input($key, $default = null)
     {
         return $_POST[$key] ?? $default;
