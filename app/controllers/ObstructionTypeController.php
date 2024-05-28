@@ -52,14 +52,12 @@ class ObstructionTypeController extends Controller
     public function destroy()
     {
         $obstruction_type_id = $this->input('obstruction_type_id');
-        var_dump($obstruction_type_id);
-        die;
+
         if ($this->obstructionType->remove($obstruction_type_id)) {
-            $this->session_put('success', 'Successfully deleted');
+            $this->session_put('success', 'Successfully deleted Obstruction Type');
         } else {
-            $this->session_put('error', 'Deletion failed');
+            $this->session_put('error', 'Error while deleting');
         }
-        $this->redirect('obstruction-types');
     }
 
     public function update($obstruction_type_id)

@@ -10,8 +10,10 @@ class HomeController extends Controller
     public function index()
     {
         $report_data = $this->obstruction->countHomeData();
+        $obstructions = $this->obstruction->all(['obstruction_type']);
         $this->view('home/index', [
-            'report_data' => $report_data
+            'report_data' => $report_data,
+            'obstructions' => $obstructions
         ]);
     }
 }

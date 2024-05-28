@@ -77,7 +77,7 @@ class ObstructionController extends Controller
 
     public function request($obstruction_id)
     {
-        if ($_SESSION[SYSTEM]['role'] != 'ADMIN') {
+        if ($_SESSION[SYSTEM]['role'] != 'USER') {
             $obstruction = $this->obstruction->find($obstruction_id, ['user']);
             $request = $this->obstructionRequest->findByObstructionId($obstruction_id);
             if ($obstruction) {

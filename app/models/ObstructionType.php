@@ -19,7 +19,7 @@ class ObstructionType extends Model
 
     public function remove($id)
     {
-        return $this->update($this->table_name, ['deleted_at' => date('Y-m-d H:i:s')], [$this->pk => $id]);
+        return $this->delete($this->table_name, [$this->pk => $id]);
     }
 
     public function add($form)

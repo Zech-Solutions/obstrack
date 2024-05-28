@@ -37,7 +37,7 @@
                                     <td><?= $row['name'] ?></td>
                                     <td>
                                         <a href="<?= URL_PUBLIC ?>/obstruction-types/<?= $row['obstruction_type_id'] ?>/edit" class="btn btn-sm btn-warning"> <span class="fa fa-edit"></span></a>
-                                        <a href="#" type="button" class="btn btn-sm btn-danger" onclick="deleteItem('<?= $row['obstruction_type_id'] ?>')"> <span class="fa fa-trash"></span></a>
+                                        <button href="#" type="button" class="btn btn-sm btn-danger" onclick="deleteItem('<?= $row['obstruction_type_id'] ?>')"> <span class="fa fa-trash"></span></button>
                                     </td>
                                 </tr>
                         <?php
@@ -49,16 +49,14 @@
             </div>
         </div>
     </div>
-    <form id="deleteForm" action="<?= URL_PUBLIC ?>/obstruction-types/destroy" method="post" style="display: none;">
-        <input type="text" name="obstruction_type_id" id="obstruction_type_id" value="">
-    </form>
 </section>
 
 <script>
     function deleteItem(id) {
-        $("#obstruction_type_id").val(id);
-        // setTimeout(function() {
-        //     document.getElementById('deleteForm').submit();
-        // }, 1000);
+        $.post(URL_PUBLIC + "/obstruction-types/data/destroy", {
+            obstruction_type_id: id
+        }, function(data, status) {
+            location.reload();
+        });
     }
 </script>

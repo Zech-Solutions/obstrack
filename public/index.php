@@ -23,7 +23,7 @@ $router->get('obstruction-types/create', 'ObstructionTypeController@create');
 $router->post('obstruction-types/store', 'ObstructionTypeController@store');
 $router->get('obstruction-types/{obstruction_type_id}/edit', 'ObstructionTypeController@edit');
 $router->post('obstruction-types/{obstruction_type_id}', 'ObstructionTypeController@update');
-$router->post('obstruction-types/destroy', 'ObstructionTypeController@destroy');
+$router->post('obstruction-types/data/destroy', 'ObstructionTypeController@destroy');
 
 // Barangays
 $router->get('brgys', 'BarangayController@index');

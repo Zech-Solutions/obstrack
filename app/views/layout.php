@@ -18,6 +18,10 @@
             /* Change this to your preferred color */
         }
     </style>
+
+    <script src="<?= URL_PUBLIC ?>/vendor/jquery/jquery.min.js"></script>
+    <script src="<?= URL_PUBLIC ?>/vendor/popper/popper.min.js"></script>
+    <script src="<?= URL_PUBLIC ?>/vendor/bootstrap/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -76,10 +80,6 @@
     <div class="container">
         <?php require_once $view; ?>
     </div>
-
-    <script src="<?= URL_PUBLIC ?>/vendor/jquery/jquery.min.js"></script>
-    <script src="<?= URL_PUBLIC ?>/vendor/popper/popper.min.js"></script>
-    <script src="<?= URL_PUBLIC ?>/vendor/bootstrap/bootstrap.min.js"></script>
 </body>
 
 </html>
