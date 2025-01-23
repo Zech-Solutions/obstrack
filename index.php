@@ -120,7 +120,7 @@ unset($_SESSION[SYSTEM]['success']);
                 <img src="https://via.placeholder.com/100x100.png?text=Traffic+Incidents" alt="Traffic Incidents Image">
             </div>
             <div class="form-content">
-                <form id="login-form" action="http://localhost/obstrack/public/login" method="POST">
+                <form id="login-form" action="<?= URL_PUBLIC ?>/login" method="POST">
                     <h2>Login</h2>
                     <div class="form-group">
                         <label for="login-username">Username</label>
@@ -143,7 +143,7 @@ unset($_SESSION[SYSTEM]['success']);
                     <p><a href="#">Forgot password?</a></p>
                 </form>
 
-                <form action="http://localhost/obstrack/public/register" method="POST" id="signup-form" style="display: none;">
+                <form action="<?= URL_PUBLIC ?>/register" method="POST" id="signup-form" style="display: none;">
                     <h2>Sign Up</h2>
                     <div class="form-row">
                         <div class="form-group col-md-4">
