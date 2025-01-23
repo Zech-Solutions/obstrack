@@ -44,7 +44,7 @@
                         <select class="form-control" id="signup-category" name="role" onchange="changeCategory()" required>
                             <option value="" disabled selected>Select Category</option>
                             <option value="ADMIN">Barangay Staff</option>
-                            <option value="DILG">DILG Staff</option>
+                            <option value="DILG">City Legal Staff</option>
                         </select>
                     </div>
                 </div>

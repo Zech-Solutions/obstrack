@@ -41,8 +41,7 @@
                             <span class="fas fa-edit"></span> Manage Data
                         </a>
                         <div class="dropdown-menu" aria-labelledby="manageDataDropdown">
-                            <!-- <a class="dropdown-item" href="<?= URL_PUBLIC ?>/departments">Departments</a> -->
-                            <a class="dropdown-item" href="<?= URL_PUBLIC ?>/obstruction-types">Obstruction Types</a>
+                            <!-- <a class="dropdown-item" href="<?= URL_PUBLIC ?>/obstruction-types">Obstruction Types</a> -->
                             <a class="dropdown-item" href="<?= URL_PUBLIC ?>/brgys">Barangays</a>
                             <a class="dropdown-item" href="<?= URL_PUBLIC ?>/users">Users</a>
                         </div>

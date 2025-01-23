@@ -19,6 +19,8 @@
             $status_badge = '<span class="badge badge-success">Resolved</span>';
         } else if ($row['status'] == 'WIP') {
             $status_badge = '<span class="badge badge-warning">Work in Progress</span>';
+        } else if ($row['status'] == 'VERIFIED') {
+            $status_badge = '<span class="badge badge-success">Verified</span>';
         } else if ($row['status'] == 'REJECTED') {
             $status_badge = '<span class="badge badge-danger">Rejected</span>';
         } else {
@@ -42,25 +44,26 @@
                 <img class="user-img rounded-circle" src="<?= URL_PUBLIC ?>/images/users/default.png" width="50" height="50">
                 <div class="ml-3">
                     <h4><?= $row['is_anonymous'] ? "Anonymous" : $row['user']['first_name'] ?></h4>
-                    <span><?= date("F d, y h:i A", strtotime($row['created_at'])) ?></span>
+                    <span><?= timeAgo($row['created_at']) ?></span>
                     <?= $status_badge ?>
                 </div>
-                <?php if (in_array($row['status'], ['PENDING', 'WIP'])  && $_SESSION[SYSTEM]['role'] == 'ADMIN' && $row['approval_status'] == 'APPROVED') { ?>
+                <?php if (in_array($row['status'], ['PENDING', 'WIP'])  && in_array($_SESSION[SYSTEM]['role'], ['ADMIN', 'DILG']) && $row['approval_status'] == 'APPROVED') { ?>
                     <div class="ml-auto">
                         <a href="<?= URL_PUBLIC ?>/obstructions/<?= $row['obstruction_id'] ?>/action" class="btn btn-secondary btn-sm"><span class="fas fa-camera"></span> Take Action</a>
                     </div>
                 <?php } ?>
                 <?php if ($_SESSION[SYSTEM]['role'] == 'ADMIN' && $row['approval_status'] == 'PENDING') { ?>
                     <div class="ml-auto">
-                        <a href="<?= URL_PUBLIC ?>/obstructions/<?= $row['obstruction_id'] ?>/request" class="btn btn-secondary btn-sm"><span class="fas fa-file"></span> Request Permission</a>
+                        <a href="<?= URL_PUBLIC ?>/obstructions/<?= $row['obstruction_id'] ?>/to-verify" class="btn btn-secondary btn-sm"><span class="fas fa-check"></span> Verify Report</a>
                     </div>
                 <?php } ?>
             </div>
             <div class="card-body">
-                <p class="card-text"><?= $row['detail'] ?></p>
-                <p class="card-text"><strong><span class="fas fa-road"></span></strong> <?= $row['obstruction_type']['name'] ?></p>
-                <p class="card-text"><strong><span class="fas fa-map-marker"></span></strong> <?= $row['brgy']['name'] ?></p>
-                <!-- Tabs -->
+                <p class="card-text">
+                    <?= $row['detail'] ?><br>
+                    <strong>Location</strong>: <?= $row['street'] . ", " . $row['brgy']['name'] ?> <br>
+                    <strong>Landmark</strong>: <?= $row['landmarks'] ?> <br>
+                </p>
                 <ul class="nav nav-tabs mt-3" id="myTab<?= $row['obstruction_id'] ?>" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="before-tab<?= $row['obstruction_id'] ?>" data-toggle="tab" href="#before<?= $row['obstruction_id'] ?>" role="tab" aria-controls="before" aria-selected="true"><span class="fas fa-camera"> </span> BEFORE</a>

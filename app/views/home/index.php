@@ -16,4 +16,12 @@ foreach ($obstructions as $obstruction) {
     $locations[] = $location;
 }
 
-require_once '../app/views/layout.php';
+// var_dump($_SESSION['obstrack']);
+$user_role = $_SESSION['obstrack']['role'] ?? "";
+if($user_role == 'USER'){
+    $view = '../app/views/home/layout/mobile.index.php';
+    require_once '../app/views/mobile.php';
+}else{
+    require_once '../app/views/layout.php';
+}
+// require_once '../app/views/layout.php';

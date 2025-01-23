@@ -59,6 +59,23 @@ class ObstructionController extends Controller
         }
     }
 
+    public function toVerify($obstruction_id)
+    {
+        if ($_SESSION[SYSTEM]['role'] != 'USER') {
+            $obstruction = $this->obstruction->find($obstruction_id, ['brgy']);
+            if ($obstruction) {
+                $this->view('obstruction/to-verify', [
+                    'obstruction' => $obstruction
+                ]);
+            } else {
+                $this->view('404/index', []);
+            }
+        } else {
+            $this->view('403/index', []);
+        }
+    }
+
+
     public function action($obstruction_id)
     {
         if ($_SESSION[SYSTEM]['role'] != 'USER') {
@@ -97,11 +114,13 @@ class ObstructionController extends Controller
     {
         $images = $this->processReportImages();
         $form = [
-            'obstruction_type_id' => $this->input('obstruction_type_id'),
+            'obstruction_type_id' => '8b350acd-faf3-4e7a-a8fe-5bc8db50c1bf',
             'brgy_id' => $this->input('brgy_id'),
             'reported_by' => $this->session('user_id'),
             'images' => json_encode($images),
             'detail' => $this->input('detail'),
+            'landmarks' => $this->input('landmarks'),
+            'street' => $this->input('street'),
             'location' => $this->input('location') ?? "[]",
             'is_anonymous' => $this->input('is_anonymous') == 'on' ? 1 : 0
         ];
@@ -125,6 +144,10 @@ class ObstructionController extends Controller
             'detail' => $this->input('detail'),
             'status' => $this->input('status')
         ];
+
+        if(!empty($this->input('notice_at'))){
+            $form['notice_at'] = $this->input('notice_at');
+        }
 
         if ($this->obstructionAction->add($form)) {
             $this->session_put('success', 'Successfully taken action');

@@ -37,6 +37,7 @@ $router->post('brgys/data/destroy', 'BarangayController@destroy');
 // Obstructions
 $router->get('obstructions', 'ObstructionController@index');
 $router->get('obstructions/create', 'ObstructionController@create');
+$router->get('obstructions/{obstruction_id}/to-verify', 'ObstructionController@toVerify');
 $router->get('obstructions/{obstruction_id}/action', 'ObstructionController@action');
 $router->get('obstructions/{obstruction_id}/request', 'ObstructionController@request');
 $router->post('obstructions/action/store', 'ObstructionController@storeAction');
@@ -62,4 +63,37 @@ $router->dispatch();
 
 if (!isset($_SESSION[SYSTEM]['user_id'])) {
     header("Location: " . URL);
+}
+
+function timeAgo($datetime, $full = false)
+{
+    $now = new DateTime();
+    $ago = new DateTime($datetime);
+    $diff = $now->diff($ago);
+
+    $diff->w = floor($diff->d / 7);
+    $diff->d -= $diff->w * 7;
+
+    $string = [
+        'y' => 'yr',
+        'm' => 'mo',
+        'w' => 'wk',
+        'd' => 'd',
+        'h' => 'hr',
+        'i' => 'min',
+        's' => 'sec',
+    ];
+    foreach ($string as $k => &$v) {
+        if ($diff->$k) {
+            $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+        } else {
+            unset($string[$k]);
+        }
+    }
+
+    if (!$full) {
+        $string = array_slice($string, 0, 1);
+    }
+
+    return $string ? implode(', ', $string) . ' ago' : 'just now';
 }
