@@ -1,12 +1,8 @@
 <div class="pt-1 pb-4" style="background-color: #2c394b;">
     <h2 class="text-center text-light pt-5 mb-5 fw-bold">Home</h2>
 </div>
-<section>
-    <p style="display: none;" id="locations"><?= json_encode($locations) ?></p>
-    <div class="row">
-        <div class="col-md-12" id="map" style="height: 500px;width:100%"></div>
-    </div>
-</section>
+<p style="display: none;" id="locations"><?= json_encode($locations) ?></p>
+<div class="col-md-12" id="map" style="height: 500px;width:100%"></div>
 <script>
     var locations = JSON.parse($("#locations").html());
 

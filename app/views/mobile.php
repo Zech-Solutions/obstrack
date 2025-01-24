@@ -17,15 +17,11 @@
 </head>
 
 <body>
-    <div class="tab-content d-md-none d-lg-none d-xl-none" id="myTabContent">
+    <div class="tab-content" id="myTabContent">
         <?php require_once $view; ?>
     </div>
 
-    <div class="d-none d-md-block d-lg-block d-xl-block">
-        <h1>Please open in mobile</h1>
-    </div>
-
-    <nav class="navbar navbar-light navbar-expand rounded-pill mb-3 ms-3 me-3 fixed-bottom d-md-none d-lg-none d-xl-none shadow"
+    <nav class="navbar navbar-light navbar-expand rounded-pill mb-3 ms-3 me-3 fixed-bottom shadow"
         style="background: #0f071f;">
         <ul class="nav nav-justified w-100" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
@@ -47,12 +43,12 @@
                     <span><i class="bi bi-geo"></i></span>
                 </button> -->
             </li>
-            <li class="nav-item" role="presentation">
+            <!-- <li class="nav-item" role="presentation">
                 <button class="nav-link" id="collection-tab" data-bs-toggle="tab" data-bs-target="#collection" type="button"
                     role="tab" aria-controls="notif" aria-selected="false">
                     <span><i class="bi bi-person"></i></span>
                 </button>
-            </li>
+            </li> -->
             <li class="nav-item" role="presentation">
                 <a href="<?= URL_PUBLIC ?>/logout" class="nav-link">
                     <span><i class="bi bi-box-arrow-right"></i></span>
