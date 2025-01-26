@@ -62,6 +62,12 @@ class User extends Model
         }
     }
 
+    public function find($id, $with = [])
+    {
+        $data = $this->select($this->table_name, '*', [$this->pk => $id], [], $with);
+        return $data[0] ?? [];
+    }
+    
     public function edit($form, $id)
     {
         return $this->update($this->table_name, $form, [$this->pk => $id]);

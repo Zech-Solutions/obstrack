@@ -20,6 +20,8 @@ if (isset($_GET['action'])) {
         $response['data'] = $controller->login();
     }else if ($action == 'register') {
         $response['data'] = $controller->register();
+    } else if ($action == 'update_profile') {
+        $response['data'] = $controller->updateProfile();
     } else if ($action == 'add_obstruction') {
         $response['data'] = $controller->addObstruction();
     } else if ($action == 'get_brgys') {
@@ -30,6 +32,8 @@ if (isset($_GET['action'])) {
         $response['data'] = $controller->getObstruction();
     } else if ($action == 'get_notifications') {
         $response['data'] = $controller->getNotifications();
+    } else if ($action == 'get_user') {
+        $response['data'] = $controller->getUser();
     } else {
         $response['status'] = "error";
         $response['message'] = 404;

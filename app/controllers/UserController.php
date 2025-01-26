@@ -179,7 +179,7 @@ class UserController extends Controller
             }
         } catch (Exception $e) {
             // Return error message
-            return $e->getMessage();
+            return '';
         }
     }
 }
