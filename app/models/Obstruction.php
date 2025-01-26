@@ -37,7 +37,7 @@ class Obstruction extends Model
 
     public function add($form)
     {
-        return $this->insert($this->table_name, $form, $this->pk);
+        return $this->insert($this->table_name, $form, $this->pk, true);
     }
 
     public function edit($form, $id)

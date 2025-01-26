@@ -16,8 +16,8 @@ class Controller
 
     public function response($data, $status = 200)
     {
-        header("Content-Type: application/json");
-        http_response_code($status);
+        // header("Content-Type: application/json");
+        // http_response_code($status);
         echo json_encode($data);
     }
 
@@ -31,6 +31,12 @@ class Controller
     {
         header("Location: " . URL);
         exit;
+    }
+
+    public function inputs()
+    {
+        $inputs = json_decode(file_get_contents('php://input'), TRUE);
+        return $inputs ?? [];
     }
 
     public function input($key, $default = null)
