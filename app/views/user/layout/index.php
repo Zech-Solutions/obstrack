@@ -26,7 +26,7 @@
                 <div class="col-md-6 card-staff card-<?=$row['role']?>">
                     <div class="card mt-2 mb-2">
                         <div class="card-header d-flex align-items-center">
-                            <img class="user-img rounded-circle" src="<?= URL_PUBLIC ?>/images/users/default.png" width="100" height="100">
+                            <img class="user-img rounded-circle" src="<?= URL_PUBLIC ?>/images/users/<?=$row['image']?>" width="100" height="100">
                             <div class="ml-5">
                                 <h4><?= $row['first_name'] . " " . $row['middle_name'] . " " . $row['last_name'] ?></h4>
                                 <span><?= $row['role'] == 'ROOT' ? "City Legal Staff" : "Brgy Staff" ?></span><br>

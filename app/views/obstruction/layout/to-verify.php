@@ -27,7 +27,11 @@
                             <?php
                             foreach ($images as $count => $image) {
                             ?>
-                                <image class="preview-image" src="<?= URL_PUBLIC . '/images/obstructions/' . $image ?>"></image>
+                                <?php if(substr($image, 0, 3) == 'vid'){ ?>
+                                        <video class="preview-image" src="<?= URL_PUBLIC . '/images/obstructions/' . $image ?>" controls />
+                                    <?php }else{ ?>
+                                        <image class="preview-image" src="<?= URL_PUBLIC . '/images/obstructions/' . $image ?>"/>
+                                    <?php } ?>
                             <?php } ?>
                         </div>
                     </div>
