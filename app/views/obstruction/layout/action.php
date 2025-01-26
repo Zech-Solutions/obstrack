@@ -14,7 +14,10 @@
         </div>
         <div class="card-body">
             <form action="<?= URL_PUBLIC ?>/obstructions/action/store" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="obstruction_id" value="<?=$obstruction['obstruction_id']?>">
+                <input type="hidden" name="obstruction_id" value="<?= $obstruction['obstruction_id'] ?>">
+
+                <input type="hidden" value="<?= $obstruction['brgy_id'] ?>" name="brgy_id">
+                <input type="hidden" value="<?= $obstruction['reported_by'] ?>" name="reported_by">
                 <div class="form-group">
                     <label for="obstruction_status">Obstruction Status</label>
                     <select class="form-control" id="obstruction_status" name="status" required>

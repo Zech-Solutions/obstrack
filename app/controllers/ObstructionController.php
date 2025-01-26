@@ -7,6 +7,8 @@ class ObstructionController extends Controller
     private $obstructionRequest;
     private $obstruction;
     private $brgy;
+    private $notification;
+    private $user;
     public function __construct()
     {
         $this->obstructionType = $this->model("ObstructionType");
@@ -14,6 +16,8 @@ class ObstructionController extends Controller
         $this->obstructionRequest = $this->model("ObstructionRequest");
         $this->obstruction = $this->model("Obstruction");
         $this->brgy = $this->model("Barangay");
+        $this->notification = $this->model("Notification");
+        $this->user = $this->model("User");
     }
 
     public function index()
@@ -28,6 +32,26 @@ class ObstructionController extends Controller
         // die;
         $this->view('obstruction/index', [
             'obstructions' => $obstructions
+        ]);
+    }
+
+    public function show()
+    {
+        $filter = $_REQUEST['filter'] ?? "";
+        $where = [];
+        if(in_array($filter, ['PENDING', 'VERIFIED', 'REJECTED', 'WIP', 'COMPLETED'])){
+            $where = ['status' => $filter];
+        }
+
+        $user_role = $_SESSION['obstrack']['role'] ?? "";
+        if($user_role === 'ADMIN'){
+            $where['brgy_id'] = $_SESSION['obstrack']['brgy_id'];
+        }
+        
+        $obstructions = $this->obstruction->all(['user', 'actions', 'obstruction_type', 'brgy'], $where);
+        $this->view('obstruction/show', [
+            'obstructions' => $obstructions,
+            'filter' => $filter
         ]);
     }
 
@@ -150,6 +174,9 @@ class ObstructionController extends Controller
         }
 
         if ($this->obstructionAction->add($form)) {
+
+            $this->prepareNotif();
+            
             $this->session_put('success', 'Successfully taken action');
             $form = [
                 'status' => $this->input('status')
@@ -161,6 +188,47 @@ class ObstructionController extends Controller
 
         $this->redirect('obstructions');
     }
+
+    public function prepareNotif()
+    {
+        $obstruction_id = $this->input('obstruction_id');
+        $reported_by = $this->input('reported_by');
+        $users = $this->user->all();
+
+        foreach($users as $user){
+            if($user['role'] == 'USER' && $reported_by != $user['user_id'])
+                continue;
+            if($user['user_id'] == $this->session('user_id'))
+                continue;
+            $this->addNotifAfterActionTaken($user['user_id'], $obstruction_id , $this->getNotifDesc());
+        }
+    }
+
+    public function getNotifDesc()
+    {
+        $status = $this->input('status');
+        if($status === 'VERIFIED')
+            return "Reported obstruction was verified upon inspection. And given a notice for compliance until " . date('F j, Y', strtotime($this->input('notice_at'))) . ".";
+        if($status === 'REJECTED')
+            return "Upon verification, the reported obstruction was found to be non-legitimate and does not constitute a violation. No further actions are required at this time.";
+        if($status === 'WIP')
+            return "Reported obstruction status is currently working in progress.";
+        if($status === 'COMPLETED')
+            return "Reported obstruction successfully resolved.";
+        return '';
+    }
+    
+    public function addNotifAfterActionTaken($user_id, $obstruction_id, $description = "")
+    {
+        $form = [
+            'sender' => $this->session('user_id'),
+            'receiver' => $user_id,
+            'obstruction_id' => $obstruction_id,
+            'description' => $description
+        ];
+        $this->notification->add($form);
+    }
+
 
     public function storeRequest()
     {

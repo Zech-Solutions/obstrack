@@ -95,7 +95,7 @@ unset($_SESSION[SYSTEM]['success']);
                                         <button type="submit" class="btn btn-primary btn-user btn-block">
                                             Login
                                         </button>
-                                        <p class="mt-3">Don't have an account? <a href="#" onclick="toggleForm()">Sign Up</a></p>
+                                        <!-- <p class="mt-3">Don't have an account? <a href="#" onclick="toggleForm()">Sign Up</a></p> -->
                                     </form>
                                     <form action="<?= URL_PUBLIC ?>/register" method="POST" id="signup-form" style="display: none;">
                                         <div class="form-row">

@@ -20,11 +20,35 @@ class Obstruction extends Model
 
     public function countHomeData()
     {
-        $total = $this->select($this->table_name);
-        $completed = $this->select($this->table_name, $this->pk, ['status' => 'COMPLETED']);
+        $user_role = $_SESSION['obstrack']['role'] ?? "";
+
+
+        $statuses = ['PENDING', 'VERIFIED', 'REJECTED', 'WIP', 'COMPLETED'];
+
+        foreach($statuses as $status){
+            $where = [];
+            if($user_role === 'ADMIN'){
+                $where['brgy_id'] = $_SESSION['obstrack']['brgy_id'];
+            }
+            $where['status'] = $status;
+            ${strtolower($status)} = $this->select($this->table_name, $this->pk,$where);
+        }
+        $where = [];
+        if($user_role === 'ADMIN'){
+            $where['brgy_id'] = $_SESSION['obstrack']['brgy_id'];
+        }
+        $total = $this->select($this->table_name, $this->pk, $where);
+
+        // $verified = $this->select($this->table_name, $this->pk, ['status' => 'VERIFIED']);
+        // $rejected = $this->select($this->table_name, $this->pk, ['status' => 'REJECTED']);
+        // $wip = $this->select($this->table_name, $this->pk, ['status' => 'WIP']);
+        // $completed = $this->select($this->table_name, $this->pk, ['status' => 'COMPLETED']);
         return [
             'total' => count($total),
-            'current' => count($total) - count($completed),
+            'pending' => count($pending),
+            'verified' => count($verified),
+            'rejected' => count($rejected),
+            'wip' => count($wip),
             'completed' => count($completed)
         ];
     }
