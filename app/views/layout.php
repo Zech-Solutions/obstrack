@@ -1,3 +1,9 @@
+<?php
+if (!isset($_SESSION[SYSTEM]['user_id'])) {
+    header("Location: " . URL);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,6 +12,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $title; ?></title>
     <link rel="stylesheet" href="<?= URL_PUBLIC ?>/vendor/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.bootstrap4.css">
     <link rel="stylesheet" href="<?= URL_PUBLIC ?>/css/style.css">
     <link rel="stylesheet" href="<?= URL_PUBLIC ?>/vendor/fontawesome/all.min.css">
     <script>
@@ -22,6 +30,8 @@
     <script src="<?= URL_PUBLIC ?>/vendor/jquery/jquery.min.js"></script>
     <script src="<?= URL_PUBLIC ?>/vendor/popper/popper.min.js"></script>
     <script src="<?= URL_PUBLIC ?>/vendor/bootstrap/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/2.2.1/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.2.1/js/dataTables.bootstrap4.js"></script>
 </head>
 
 <body>
@@ -35,7 +45,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="<?= URL_PUBLIC ?>/home"><span class="fas fa-home"></span> Dashboard</a>
                 </li>
-                <?php if (in_array($_SESSION[SYSTEM]['role'], ['ROOT', 'ADMIN'])) { ?>
+                <?php if (in_array($_SESSION[SYSTEM]['role'], ['ROOT'])) { ?>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="manageDataDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="fas fa-edit"></span> Manage Data
@@ -43,7 +53,7 @@
                         <div class="dropdown-menu" aria-labelledby="manageDataDropdown">
                             <!-- <a class="dropdown-item" href="<?= URL_PUBLIC ?>/obstruction-types">Obstruction Types</a> -->
                             <a class="dropdown-item" href="<?= URL_PUBLIC ?>/brgys">Barangays</a>
-                            <a class="dropdown-item" href="<?= URL_PUBLIC ?>/users">Users</a>
+                            <a class="dropdown-item" href="<?= URL_PUBLIC ?>/users">Staffs</a>
                         </div>
                     </li>
                 <?php } ?>
@@ -57,13 +67,16 @@
                         <a class="nav-link" href="<?= URL_PUBLIC ?>/obstructions/requests"><span class="fas fa-file"></span> Requests</a>
                     </li>
                 <?php } ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= URL_PUBLIC ?>/notifications"><span class="fas fa-bell"></span> Notifications</a>
+                </li>
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
                     <div class="container">
                         <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
-                            <img class="user-img rounded-circle" src="<?= URL_PUBLIC ?>/images/users/default.png" alt="default" width="30" height="30">
+                            <img class="user-img rounded-circle" src="<?= URL_PUBLIC ?>/images/users/<?=$_SESSION[SYSTEM]['image']?>" alt="default" width="30" height="30">
                             <span><?= $_SESSION[SYSTEM]['first_name'] . " " . $_SESSION[SYSTEM]['middle_name'] . " " . $_SESSION[SYSTEM]['last_name'] ?></span>
                         </a>
                         <div class="dropdown-menu mr-auto" aria-labelledby="profileDropdown">

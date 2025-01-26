@@ -46,6 +46,8 @@ class User extends Model
                     'fullname' => $user[0]['first_name'] . " " . $user[0]['last_name']
                 ];
             }
+            if($user[0]['role'] === 'USER')
+                return false;
             $_SESSION[SYSTEM] = $user[0];
             return true;
         } else {
@@ -58,5 +60,10 @@ class User extends Model
             }
             return false;
         }
+    }
+
+    public function edit($form, $id)
+    {
+        return $this->update($this->table_name, $form, [$this->pk => $id]);
     }
 }

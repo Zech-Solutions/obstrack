@@ -1,34 +1,63 @@
 <section style="margin-top: 80px;">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#"><span class="fas fa-home"></span> Dashboard</a></li>
-            <!-- <li class="breadcrumb-item"><a href="#">Library</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Data</li> -->
-        </ol>
-    </nav>
     <div class="row">
         <p style="display: none;" id="locations"><?= json_encode($locations) ?></p>
         <div class="col-md-4 mb-4">
-            <div class="card">
+            <div class="card bg-primary text-white">
                 <div class="card-body text-center">
                     <h3 class="card-title"><i class="fas fa-clipboard-list"></i> Total Reports</h3>
-                    <p id="total-reports" class="card-text display-4"><?= $report_data['total'] ?></p>
+                    <p class="card-text display-4">
+                        <a href="<?=URL_PUBLIC?>/obstructions/show?filter=all" class="text-white"><?= $report_data['total'] ?></a>
+                    </p>
                 </div>
             </div>
         </div>
         <div class="col-md-4 mb-4">
-            <div class="card">
+            <div class="card bg-secondary text-white">
                 <div class="card-body text-center">
-                    <h3 class="card-title"><i class="fas fa-exclamation-circle"></i> Active Obstructions</h3>
-                    <p id="active-obstructions" class="card-text display-4"><?= $report_data['current'] ?></p>
+                    <h3 class="card-title"><i class="fas fa-book"></i> Pending Reports</h3>
+                    <p class="card-text display-4">
+                        <a href="<?=URL_PUBLIC?>/obstructions/show?filter=PENDING" class="text-white"><?= $report_data['pending'] ?></a>
+                    </p>
                 </div>
             </div>
         </div>
         <div class="col-md-4 mb-4">
-            <div class="card">
+            <div class="card bg-info text-white">
                 <div class="card-body text-center">
-                    <h3 class="card-title"><i class="fas fa-check-circle"></i> Resolved Issues</h3>
-                    <p id="resolved-issues" class="card-text display-4"><?= $report_data['completed'] ?></p>
+                    <h3 class="card-title"><i class="fas fa-check-circle"></i> Verified Reports</h3>
+                    <p class="card-text display-4">
+                        <a href="<?=URL_PUBLIC?>/obstructions/show?filter=VERIFIED" class="text-white"><?= $report_data['verified'] ?></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card bg-danger text-white">
+                <div class="card-body text-center">
+                    <h3 class="card-title"><i class="fas fa-times-circle"></i> Rejected Reports</h3>
+                    <p class="card-text display-4">
+                        <a href="<?=URL_PUBLIC?>/obstructions/show?filter=REJECTED" class="text-white"><?= $report_data['rejected'] ?></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card bg-warning text-white">
+                <div class="card-body text-center">
+                    <h3 class="card-title"><i class="fas fa-exclamation-circle"></i> Inprogress Reports</h3>
+                    <p class="card-text display-4">
+                        <a href="<?=URL_PUBLIC?>/obstructions/show?filter=WIP" class="text-white"><?= $report_data['wip'] ?></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card bg-success text-white">
+                <div class="card-body text-center">
+                    <h3 class="card-title"><i class="fas fa-check-circle"></i> Resolved Reports</h3>
+                    <p class="card-text display-4">
+                        <a href="<?=URL_PUBLIC?>/obstructions/show?filter=COMPLETED" class="text-white"><?= $report_data['completed'] ?></a>
+                    </p>
                 </div>
             </div>
         </div>
@@ -87,8 +116,8 @@
         var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 13,
             center: {
-                lat: 0,
-                lng: 0
+                lat: 10.64358984425083,
+                lng: 122.94014836858112
             } // Temporary center
         });
 
@@ -105,12 +134,12 @@
                     locations.forEach(function(location) {
                         var marker = new google.maps.Marker({
                             position: {
-                                lat: location.lat,
-                                lng: location.lng
+                                lat: location.latitude * 1,
+                                lng: location.longitude * 1
                             },
                             map: map,
                             title: location.title,
-                            // label: location.title,
+                            label: location.title,
                         });
 
                         var infowindow = new google.maps.InfoWindow({
@@ -135,8 +164,8 @@
 
         function handleLocationError(browserHasGeolocation, map) {
             var pos = {
-                lat: 51.505,
-                lng: -0.09
+                lat: 10.64358984425083,
+                lng: 122.94014836858112
             }; // Default position
             map.setCenter(pos);
             var infoWindow = new google.maps.InfoWindow({

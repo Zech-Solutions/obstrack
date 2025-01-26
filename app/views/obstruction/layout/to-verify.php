@@ -56,6 +56,8 @@
                         <button type="submit" class="btn btn-primary mt-3"><span class="fas fa-file"></span> Submit Verification</button>
                     </div>
                 </div>
+                <input type="hidden" value="<?=$obstruction['brgy_id']?>" name="brgy_id">
+                <input type="hidden" value="<?=$obstruction['reported_by']?>" name="reported_by">
             </form>
         </div>
     </div>

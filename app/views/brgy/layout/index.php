@@ -1,11 +1,4 @@
 <section style="margin-top: 80px;">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#"><span class="fas fa-home"></span> Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="#">Barangays</a></li>
-            <!-- <li class="breadcrumb-item active" aria-current="page">Data</li> -->
-        </ol>
-    </nav>
     <div class="card mt-4">
         <div class="card-header">
             <h5><span class="fas fa-map"></span> Barangays</h5>
@@ -19,7 +12,7 @@
                 <?= $badge_error ?>
             </div>
             <div class="mt-2">
-                <table class="table table-bordered">
+                <table id="example" class="table table-striped" style="width:100%">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -56,6 +49,9 @@
 </section>
 
 <script>
+    $(document).ready(function() {
+        new DataTable('#example');
+    });
     function deleteData(id) {
         $.post(URL_PUBLIC + "/brgys/data/destroy", {
             brgy_id: id

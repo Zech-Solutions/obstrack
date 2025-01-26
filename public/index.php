@@ -11,6 +11,8 @@ require_once '../app/core/Router.php';
 // require_once '../app/controllers/UserController.php';
 // require_once '../app/controllers/ApiController.php';
 
+date_default_timezone_set("Asia/Manila");
+
 $router = new Router();
 
 // Web routes
@@ -37,6 +39,7 @@ $router->post('brgys/data/destroy', 'BarangayController@destroy');
 // Obstructions
 $router->get('obstructions', 'ObstructionController@index');
 $router->get('obstructions/create', 'ObstructionController@create');
+$router->get('obstructions/show', 'ObstructionController@show');
 $router->get('obstructions/{obstruction_id}/to-verify', 'ObstructionController@toVerify');
 $router->get('obstructions/{obstruction_id}/action', 'ObstructionController@action');
 $router->get('obstructions/{obstruction_id}/request', 'ObstructionController@request');
@@ -48,22 +51,22 @@ $router->get('obstructions/requests', 'ObstructionController@indexRequest');
 
 // USER
 $router->post('register', 'UserController@register');
+$router->get('profile', 'UserController@profile');
+$router->post('profile/update', 'UserController@update');
 $router->post('login', 'UserController@login');
 $router->get('logout', 'UserController@logout');
 $router->get('users', 'UserController@index');
 $router->get('users/create', 'UserController@create');
 $router->post('users/store', 'UserController@store');
 
+// Notifications
+$router->get('notifications', 'NotificationController@index');
 
 // API routes
 $router->get('api/data', 'ApiController@getData');
+$router->get('api/login', 'ApiController@login');
 
 $router->dispatch();
-
-
-if (!isset($_SESSION[SYSTEM]['user_id'])) {
-    header("Location: " . URL);
-}
 
 function timeAgo($datetime, $full = false)
 {
@@ -96,4 +99,20 @@ function timeAgo($datetime, $full = false)
     }
 
     return $string ? implode(', ', $string) . ' ago' : 'just now';
+}
+
+function badgeStatus($status){
+    if ($status == 'COMPLETED') {
+        $status_badge = '<span class="badge badge-success">Resolved</span>';
+    } else if ($status == 'WIP') {
+        $status_badge = '<span class="badge badge-warning">Work in Progress</span>';
+    } else if ($status == 'VERIFIED') {
+        $status_badge = '<span class="badge badge-success">Verified</span>';
+    } else if ($status == 'REJECTED') {
+        $status_badge = '<span class="badge badge-danger">Rejected</span>';
+    } else {
+        $status_badge = '<span class="badge badge-danger">Pending</span>';
+    }
+
+    return $status_badge;
 }
