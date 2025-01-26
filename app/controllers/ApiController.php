@@ -40,6 +40,15 @@ class ApiController extends Controller
         return $obstructions;
     }
 
+    public function getUser()
+    {
+        $input = $this->inputs()['input'];
+        $user_id = $input['user_id'];
+        $user = $this->user->find($user_id);
+        return $user;
+    }
+
+
     public function getAllObstructions()
     {
         $obstructions = $this->obstruction->all(['user', 'actions', 'obstruction_type', 'brgy']);
@@ -85,6 +94,35 @@ class ApiController extends Controller
         ];
 
         if ($this->user->register($form)) {
+            return [
+                'status' => 'success'
+            ];
+        } else {
+            return [
+                'status' => 'errror'
+            ];
+        }
+    }
+
+    public function updateProfile()
+    {
+        $image = $this->processProfileImage();
+        $form = [
+            'user_id' => $this->input('user_id'),
+            'first_name' => $this->input('first_name'),
+            'middle_name' => $this->input('middle_name'),
+            'last_name' => $this->input('last_name'),
+            'dob' => $this->input('dob'),
+            'gender' => $this->input('gender'),
+            'address' => $this->input('address'),
+            'email' => $this->input('email')
+        ];
+
+        if(!empty($image)){
+            $form['image'] = $image;
+        }
+
+        if ($this->user->edit($form, $this->input('user_id'))) {
             return [
                 'status' => 'success'
             ];
@@ -190,5 +228,46 @@ class ApiController extends Controller
             return 'img';
         if (strpos($fileType, 'video') !== false)
             return 'vid';
+    }
+    
+    public function processProfileImage()
+    {
+        $uploadDir = "../public/images/users"; // Target directory for uploads
+        $file_image = $this->files("image"); // Retrieve the single file input
+
+        try {
+            // Check if the uploaded file exists and has no errors
+            if (isset($file_image) && $file_image["error"] === UPLOAD_ERR_OK) {
+                $file_tmp = $file_image["tmp_name"];
+                $file_name = $file_image["name"];
+                $file_type = $file_image["type"];
+
+                // Check if the uploaded file is an image
+                if (exif_imagetype($file_tmp) === false) {
+                    throw new Exception("Uploaded file is not a valid image.");
+                }
+
+                // Extract the file extension
+                $ext = pathinfo($file_name, PATHINFO_EXTENSION);
+
+                // Generate a unique filename
+                $image = uniqid() . "." . $ext;
+
+                // Full path to save the file
+                $target_file = $uploadDir . "/" . $image;
+
+                // Move the uploaded file to the destination directory
+                if (move_uploaded_file($file_tmp, $target_file)) {
+                    return $image; // Return the filename of the uploaded image
+                } else {
+                    throw new Exception("Failed to move the uploaded file.");
+                }
+            } else {
+                throw new Exception("No file uploaded or an error occurred during upload.");
+            }
+        } catch (Exception $e) {
+            // Return error message
+            return '';
+        }
     }
 }
