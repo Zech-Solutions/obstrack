@@ -55,7 +55,7 @@
                 </div>
                 <div class="form-group">
                     <label for="images">Select Images</label>
-                    <input type="file" class="form-control-file" id="images" accept="image/*" multiple onchange="previewImages()" name="images[]" required>
+                    <input type="file" class="form-control-file" id="images" accept="image/*" multiple onchange="previewImages()" name="images[]" capture="environment" required>
                 </div>
                 <div id="imagePreview" class="mt-2"></div>
                 <button type="submit" class="btn btn-secondary mt-3"><span class="fas fa-file"></span> Report Now</button>

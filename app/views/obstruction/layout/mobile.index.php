@@ -108,7 +108,9 @@
                                 <div class="timestamp">
                                     <?= date("F d, y h:i A", strtotime($action['created_at'])) ?>
                                 </div>
-                                <div class="item-title"><?= $itemTitle ?><br>
+                                <div class="item-title">
+                                    <?=$action['status']?><br>
+                                    <?= $itemTitle ?><br>
                                     <?php
                                     foreach ($images as $count => $image) {
                                     ?>

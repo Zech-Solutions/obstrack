@@ -47,12 +47,12 @@
                     <span><?= timeAgo($row['created_at']) ?></span>
                     <?= $status_badge ?>
                 </div>
-                <?php if (in_array($row['status'], ['PENDING', 'WIP'])  && in_array($_SESSION[SYSTEM]['role'], ['ADMIN', 'DILG']) && $row['approval_status'] == 'APPROVED') { ?>
+                <?php if (in_array($row['status'], ['VERIFIED', 'WIP'])  && in_array($_SESSION[SYSTEM]['role'], ['ADMIN', 'DILG'])) { ?>
                     <div class="ml-auto">
                         <a href="<?= URL_PUBLIC ?>/obstructions/<?= $row['obstruction_id'] ?>/action" class="btn btn-secondary btn-sm"><span class="fas fa-camera"></span> Take Action</a>
                     </div>
                 <?php } ?>
-                <?php if ($_SESSION[SYSTEM]['role'] == 'ADMIN' && $row['approval_status'] == 'PENDING') { ?>
+                <?php if ($_SESSION[SYSTEM]['role'] == 'ADMIN' && $row['status'] == 'PENDING') { ?>
                     <div class="ml-auto">
                         <a href="<?= URL_PUBLIC ?>/obstructions/<?= $row['obstruction_id'] ?>/to-verify" class="btn btn-secondary btn-sm"><span class="fas fa-check"></span> Verify Report</a>
                     </div>
