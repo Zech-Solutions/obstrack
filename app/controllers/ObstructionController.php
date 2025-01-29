@@ -83,6 +83,18 @@ class ObstructionController extends Controller
         }
     }
 
+    public function detail($obstruction_id)
+    {
+        $obstruction = $this->obstruction->find($obstruction_id, ['brgy', 'actions', 'user']);
+        if ($obstruction) {
+            $this->view('obstruction/detail', [
+                'obstruction' => $obstruction
+            ]);
+        } else {
+            $this->view('404/index', []);
+        }
+    }
+
     public function toVerify($obstruction_id)
     {
         if ($_SESSION[SYSTEM]['role'] != 'USER') {
@@ -166,7 +178,8 @@ class ObstructionController extends Controller
             'actioned_by' => $this->session('user_id'),
             'images' => json_encode($images),
             'detail' => $this->input('detail'),
-            'status' => $this->input('status')
+            'status' => $this->input('status'),
+            'created_at' => date("Y-m-d H:i:s")
         ];
 
         if(!empty($this->input('notice_at'))){

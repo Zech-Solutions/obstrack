@@ -1,47 +1,43 @@
-<section style="margin-top: 80px;">
-    <?php if ($_SESSION[SYSTEM]['role'] == 'USER') { ?>
-        <a href="<?= URL_PUBLIC ?>/obstructions/create" class="btn btn-secondary report-btn"><i class="fas fa-plus"></i> Report</a>
-    <?php } ?>
+<?php
+$images = json_decode($obstruction['images']);
+$actions = $obstruction['actions'];
+usort($actions, function ($a, $b) {
+    return strtotime($a['created_at']) - strtotime($b['created_at']);
+});
+?>
 
-    <?php
-    foreach ($obstructions as $row) {
-        $images = json_decode($row['images']);
-        $actions = $row['actions'];
-        usort($actions, function ($a, $b) {
-            return strtotime($a['created_at']) - strtotime($b['created_at']);
-        });
-    ?>
-        <div class="card mt-2 mb-2">
+<section style="margin-top: 80px;">
+    <div class="card mt-2 mb-2">
             <div class="card-header d-flex align-items-center">
-                <img class="user-img rounded-circle" src="<?= URL_PUBLIC ?>/images/users/<?=$row['is_anonymous'] ? 'default.png' : $row['user']['image']?>" width="50" height="50">
+                <img class="user-img rounded-circle" src="<?= URL_PUBLIC ?>/images/users/<?=$obstruction['is_anonymous'] ? 'default.png' : $obstruction['user']['image']?>" width="50" height="50">
                 <div class="ml-3">
-                    <h4><?= $row['is_anonymous'] ? "Anonymous" : $row['user']['first_name'] ?></h4>
-                    <span><?= timeAgo($row['created_at']) ?></span>
-                    <?= badgeStatus($row['status']) ?>
+                    <h4><?= $obstruction['is_anonymous'] ? "Anonymous" : $obstruction['user']['first_name'] ?></h4>
+                    <span><?= timeAgo($obstruction['created_at']) ?></span>
+                    <?= badgeStatus($obstruction['status']) ?>
                 </div>
-                <?php if (in_array($row['status'], ['VERIFIED', 'WIP'])  && in_array($_SESSION[SYSTEM]['role'], ['ADMIN', 'DILG'])) { ?>
+                <?php if (in_array($obstruction['status'], ['VERIFIED', 'WIP'])  && in_array($_SESSION[SYSTEM]['role'], ['ADMIN', 'DILG'])) { ?>
                     <div class="ml-auto">
-                        <a href="<?= URL_PUBLIC ?>/obstructions/<?= $row['obstruction_id'] ?>/action" class="btn btn-secondary btn-sm"><span class="fas fa-camera"></span> Take Action</a>
+                        <a href="<?= URL_PUBLIC ?>/obstructions/<?= $obstruction['obstruction_id'] ?>/action" class="btn btn-secondary btn-sm"><span class="fas fa-camera"></span> Take Action</a>
                     </div>
                 <?php } ?>
-                <?php if ($_SESSION[SYSTEM]['role'] == 'ADMIN' && $row['status'] == 'PENDING') { ?>
+                <?php if ($_SESSION[SYSTEM]['role'] == 'ADMIN' && $obstruction['status'] == 'PENDING') { ?>
                     <div class="ml-auto">
-                        <a href="<?= URL_PUBLIC ?>/obstructions/<?= $row['obstruction_id'] ?>/to-verify" class="btn btn-secondary btn-sm"><span class="fas fa-check"></span> Verify Report</a>
+                        <a href="<?= URL_PUBLIC ?>/obstructions/<?= $obstruction['obstruction_id'] ?>/to-verify" class="btn btn-secondary btn-sm"><span class="fas fa-check"></span> Verify Report</a>
                     </div>
                 <?php } ?>
             </div>
             <div class="card-body">
                 <p class="card-text">
-                    <?= $row['detail'] ?><br>
-                    <strong>Location</strong>: <?= $row['street'] . ", " . $row['brgy']['name'] ?> <br>
-                    <strong>Landmark</strong>: <?= $row['landmarks'] ?> <br>
+                    <?= $obstruction['detail'] ?><br>
+                    <strong>Location</strong>: <?= $obstruction['street'] . ", " . $obstruction['brgy']['name'] ?> <br>
+                    <strong>Landmark</strong>: <?= $obstruction['landmarks'] ?> <br>
                 </p>
                 <div class="rb-container">
                     <h6>Timeline</h6>
                     <ul class="rb">
                         <li class="rb-item" ng-repeat="itembx">
                             <div class="timestamp">
-                                <?= date("F d, y h:i A", strtotime($row['created_at'])) ?>
+                                <?= date("F d, y h:i A", strtotime($obstruction['created_at'])) ?>
                             </div>
                             <div><?= badgeStatus('PENDING') ?></div>
                             <div class="item-title">Citizen reported an obstruction.<br>
@@ -88,7 +84,6 @@
                 </div>
             </div>
         </div>
-    <?php } ?>
 </section>
 
 <style>

@@ -17,7 +17,7 @@ class HomeController extends Controller
         }
 
         $report_data = $this->obstruction->countHomeData();
-        $obstructions = $this->obstruction->all(['obstruction_type'], $where);
+        $obstructions = $this->obstruction->all(['obstruction_type', 'brgy'], $where);
         $this->view('home/index', [
             'report_data' => $report_data,
             'obstructions' => $obstructions
