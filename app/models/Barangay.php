@@ -11,7 +11,7 @@ class Barangay extends Model
             '*',
             [],
             [
-                'created_at' => 'DESC',
+                'name' => 'ASC',
             ],
             $with
         );

@@ -4,6 +4,8 @@ $view = '../app/views/home/layout/index.php';
 
 $locations = [];
 foreach ($obstructions as $obstruction) {
+    if(in_array($obstruction['status'], ['REJECTED', 'COMPLETED']))
+        continue;
     $location = json_decode($obstruction['location'], true);
     if (empty($location)) {
         $location = [
@@ -11,8 +13,8 @@ foreach ($obstructions as $obstruction) {
             'lng' => 122.93992712714316
         ];
     }
-    $location['title'] = $obstruction['obstruction_type']['name'];
-    $location['content'] =  $obstruction['obstruction_type']['name'] . " <br>" . date("M d, Y h:i A", strtotime($obstruction['created_at']))  . "<br>" . $obstruction['detail'] . "<br>" . $obstruction['status'];
+    $location['title'] = $obstruction['street'] . ", " . $obstruction['brgy']['name'];
+    $location['content'] = date("M d, Y h:i A", strtotime($obstruction['created_at']))  . "<br>" . $obstruction['detail'] . "<br>" . $obstruction['status'];
     $locations[] = $location;
 }
 

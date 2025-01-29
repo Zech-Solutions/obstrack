@@ -14,6 +14,7 @@
                 <th>Details</th>
                 <th>landmark</th>
                 <th>Status</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -27,6 +28,11 @@
                     <td><?= $row['detail'] ?></td>
                     <td><?= $row['landmarks'] ?></td>
                     <td><?= badgeStatus($row['status']) ?></td>
+                    <td>
+                        <a href="<?=URL_PUBLIC?>/obstructions/<?=$row['obstruction_id']?>">
+                            <span class="fas fa-eye"></span> View
+                        </a>
+                    </td>
                 </tr>
             <?php } ?>
         </tbody>

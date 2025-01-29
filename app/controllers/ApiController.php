@@ -15,7 +15,6 @@ class ApiController extends Controller
         $this->notification = $this->model("Notification");
         $this->barangay = $this->model("Barangay");
         $this->obstructionAction = $this->model("ObstructionAction");
-
     }
 
     public function getData()
@@ -60,7 +59,44 @@ class ApiController extends Controller
         $input = $this->inputs()['input'];
         $obstruction_id = $input['obstruction_id'];
         $obstruction = $this->obstruction->find($obstruction_id, ['user', 'actions', 'obstruction_type', 'brgy']);
+        $obstruction['actions'] = $this->fixObstructionData($obstruction);
+        $obstruction['images'] = json_decode($obstruction["images"]);
         return $obstruction;
+    }
+
+    public function fixObstructionData($obstruction)
+    {
+        $actions = [];
+        $actions[] = array(
+            'created_at' => $obstruction['created_at'],
+            'status' => "PENDING",
+            'detail' => '',
+            'images' => json_decode($obstruction["images"]),
+            'description' => 'Citizen reported an obstruction.'
+        );
+        if ($obstruction['actions'] > 0) {
+            foreach ($obstruction['actions'] as $action) {
+                $data = array(
+                    'created_at' => $action['created_at'],
+                    'status' => $action['status'],
+                    'detail' => $action['detail'],
+                    'images' => json_decode($action["images"]),
+                    'description' => $action['detail']
+                );
+                if ($action['status'] === 'VERIFIED') {
+                    $data['description'] = "Reported obstruction was verified upon inspection. And given a notice for compliance until " . date("F d, Y", strtotime($action['notice_at']));
+                }
+                if ($action['status'] === 'REJECTED') {
+                    $data['description'] = "Upon verification, the reported obstruction was not found to be non-legitimate and does not constitiute a violation. no further actions are required at this time";
+                }
+                $actions[] = $data;
+            }
+        }
+
+        usort($actions, function ($a, $b) {
+            return strtotime($a['created_at']) - strtotime($b['created_at']);
+        });
+        return $actions;
     }
 
     public function login()
@@ -118,7 +154,7 @@ class ApiController extends Controller
             'email' => $this->input('email')
         ];
 
-        if(!empty($image)){
+        if (!empty($image)) {
             $form['image'] = $image;
         }
 
@@ -145,19 +181,20 @@ class ApiController extends Controller
             'landmarks' => $this->input('landmarks'),
             'street' => $this->input('street'),
             'location' => $this->input('location') ?? "[]",
-            'is_anonymous' => $this->input('is_anonymous')
+            'is_anonymous' => $this->input('is_anonymous'),
+            'created_at' => date("Y-m-d H:i:s"),
         ];
 
         $obstruction_id = $this->obstruction->add($form);
-        if($obstruction_id != ''){
+        if ($obstruction_id != '') {
 
             $brgys = $this->user->filter(['brgy_id' => $this->input('brgy_id')]);
-            foreach($brgys as $row){
+            foreach ($brgys as $row) {
                 $this->addNotifAfterObstructionCreated($row['user_id'], $obstruction_id);
             }
-            
+
             $roots = $this->user->filter(['role' => 'ROOT']);
-            foreach($roots as $row){
+            foreach ($roots as $row) {
                 $this->addNotifAfterObstructionCreated($row['user_id'], $obstruction_id);
             }
         }
@@ -173,7 +210,8 @@ class ApiController extends Controller
             'sender' => $this->input('reported_by'),
             'receiver' => $user_id,
             'obstruction_id' => $obstruction_id,
-            'description' => "New obstruction was reported by citizen."
+            'description' => "New obstruction was reported by citizen.",
+            'created_at' => date("Y-m-d H:i:s"),
         ];
         $this->notification->add($form);
     }
@@ -229,7 +267,7 @@ class ApiController extends Controller
         if (strpos($fileType, 'video') !== false)
             return 'vid';
     }
-    
+
     public function processProfileImage()
     {
         $uploadDir = "../public/images/users"; // Target directory for uploads

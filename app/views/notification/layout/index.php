@@ -6,7 +6,7 @@
        <?php 
         foreach($notifications as $row){
        ?>
-      <a href="#" class="list-group-item list-group-item-action d-flex align-items-start bg-light">
+      <a href="<?=URL_PUBLIC?>/obstructions/<?=$row['obstruction_id']?>" class="list-group-item list-group-item-action d-flex align-items-start bg-light">
         <div class="ms-2 me-auto">
           <div class="fw-bold"><?=""?></div>
           <?=$row['description']?>
