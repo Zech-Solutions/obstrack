@@ -237,7 +237,8 @@ class ObstructionController extends Controller
             'sender' => $this->session('user_id'),
             'receiver' => $user_id,
             'obstruction_id' => $obstruction_id,
-            'description' => $description
+            'description' => $description,
+            'created_at' => date("Y-m-d H:i:s"),
         ];
         $this->notification->add($form);
     }
