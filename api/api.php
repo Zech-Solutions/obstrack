@@ -34,6 +34,8 @@ if (isset($_GET['action'])) {
         $response['data'] = $controller->getObstruction();
     } else if ($action == 'get_notifications') {
         $response['data'] = $controller->getNotifications();
+    } else if ($action == 'update_notification') {
+        $response['data'] = $controller->updateNotification();
     } else if ($action == 'get_user') {
         $response['data'] = $controller->getUser();
     } else {

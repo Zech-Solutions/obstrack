@@ -9,7 +9,7 @@ class NotificationController extends Controller
     }
     public function index()
     {
-        $notifications = $this->notification->all(['obstruction'], ['receiver' => $this->session('user_id')]);
+        $notifications = $this->notification->all(['obstruction','user_sender', 'user_receiver'], ['receiver' => $this->session('user_id')]);
 
         $this->view('notification/index', [
             'notifications' => $notifications

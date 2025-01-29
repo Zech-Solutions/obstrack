@@ -39,6 +39,16 @@ class ApiController extends Controller
         return $obstructions;
     }
 
+    public function updateNotification()
+    {
+        $input = $this->inputs()['input'];
+
+        $obstruction = $this->notification->edit([
+            'is_seen' => 1
+        ], $input['notification_id']);
+        return $obstruction;
+    }
+
     public function getUser()
     {
         $input = $this->inputs()['input'];
@@ -172,6 +182,11 @@ class ApiController extends Controller
     public function addObstruction()
     {
         $images = $this->processReportImages();
+        if(count($images) < 1)
+            return [
+                'status' => 'no-media',
+                'obstruction_id' => 0
+            ];
         $form = [
             'obstruction_type_id' => '8b350acd-faf3-4e7a-a8fe-5bc8db50c1bf',
             'brgy_id' => $this->input('brgy_id'),
