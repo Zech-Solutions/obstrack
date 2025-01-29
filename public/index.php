@@ -57,6 +57,8 @@ $router->post('profile/update', 'UserController@update');
 $router->post('login', 'UserController@login');
 $router->get('logout', 'UserController@logout');
 $router->get('users', 'UserController@index');
+$router->get('users/{user_id}/edit', 'UserController@edit');
+$router->post('users/{user_id}/update', 'UserController@updateStaff');
 $router->get('users/create', 'UserController@create');
 $router->post('users/store', 'UserController@store');
 

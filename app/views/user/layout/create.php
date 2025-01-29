@@ -27,11 +27,15 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
+                        <label for="signup-email">Email</label>
+                        <input type="email" class="form-control" id="signup-email" name="email" required>
+                    </div>
+                    <div class="form-group col-md-3">
                         <label for="signup-birthdate">Birthdate</label>
                         <input type="date" class="form-control" id="signup-birthdate" name="dob" max="<?= date('Y-m-d') ?>" required>
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
                         <label for="signup-gender">Gender</label>
                         <select class="form-control" id="signup-gender" name="gender" required>
                             <option value="" disabled selected>Select gender</option>
@@ -39,7 +43,7 @@
                             <option value="F">Female</option>
                         </select>
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
                         <label for="signup-category">Category</label>
                         <select class="form-control" id="signup-category" name="role" onchange="changeCategory()" required>
                             <option value="" disabled selected>Select Category</option>

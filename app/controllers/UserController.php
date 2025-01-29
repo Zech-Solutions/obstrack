@@ -25,6 +25,14 @@ class UserController extends Controller
             'brgys' => $brgys
         ]);
     }
+    
+    public function edit($user_id)
+    {
+        $user = $this->user->find($user_id);
+        $this->view('user/edit', [
+            'user' => $user
+        ]);
+    }
 
     public function store()
     {
@@ -42,6 +50,8 @@ class UserController extends Controller
             'dob' => $this->input('dob'),
             'gender' => $this->input('gender'),
             'role' => $this->input('role'),
+            'email' => $this->input('email'),
+            'address' => $this->input('address') ?? '',
         ];
 
         if ($this->input('role') == 'ADMIN')
@@ -54,6 +64,31 @@ class UserController extends Controller
         }
     }
 
+    public function updateStaff($user_id)
+    {
+        $image = $this->processProfileImage();
+        $form = [
+            'first_name' => $this->input('first_name'),
+            'middle_name' => $this->input('middle_name'),
+            'last_name' => $this->input('last_name'),
+            'dob' => $this->input('dob'),
+            'gender' => $this->input('gender'),
+            'email' => $this->input('email'),
+            'address' => $this->input('address'),
+        ];
+        if (!empty($image)) {
+            $form['image'] = $image;
+        }
+
+        if ($this->user->edit($form, $user_id)) {
+            $this->session_put('success', 'Successfully updated!');
+        } else {
+            $this->session_put('error', 'Error occur!');
+        }
+        $this->redirect('users');
+    }
+
+    
     public function update()
     {
         $user_id = $this->session('user_id');
