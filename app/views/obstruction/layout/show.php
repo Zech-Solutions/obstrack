@@ -13,15 +13,15 @@
         <h5 class="p-2 text-center">
             Obstructions (<?= ucfirst(strtolower($filter)) ?>)
         </h5>
-        <table id="example" class="table" style="width:100%">
+        <table id="example" class="table table-striped" style="width:100%">
             <thead>
                 <tr>
                     <th>#</th>
                     <th>Date</th>
                     <th>Reported By</th>
                     <th>Brgy</th>
-                    <th>Street</th>
                     <th>Status</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,8 +31,12 @@
                         <td><?= date("F d, Y", strtotime($row['created_at'])) ?></td>
                         <td><?= $row['is_anonymous'] ? "Anonymous" : $row['user']['first_name'] ?></td>
                         <td><?= $row['brgy']['name'] ?? "" ?></td>
-                        <td><?= $row['street'] ?></td>
-                        <td><?= labelStatus($row['status']) ?></td>
+                        <td><?= badgeStatus($row['status']) ?></td>
+                        <td>
+                            <a href="<?= URL_PUBLIC ?>/obstructions/<?= $row['obstruction_id'] ?>">
+                                <span class="fas fa-eye"></span> View
+                            </a>
+                        </td>
                     </tr>
                 <?php } ?>
             </tbody>
@@ -41,7 +45,11 @@
 </section>
 <script>
     $(document).ready(function() {
-        // new DataTable('#example');
+        new DataTable('#example', {
+            paging: false, // Disable pagination
+            searching: false, // Disable search box
+            info: false
+        });
     });
 
     function printDiv() {
