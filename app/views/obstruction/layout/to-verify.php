@@ -40,8 +40,8 @@
                             <label for="obstruction_status">Verification Status</label>
                             <select class="form-control" id="obstruction_status" name="status" onchange="changeStatus()" required>
                                 <option value="" disabled selected>Select Type</option>
-                                <option value="VERIFIED">Verified</option>
-                                <option value="REJECTED">Rejected</option>
+                                <option value="VERIFIED">Verify</option>
+                                <option value="REJECTED">Reject</option>
                             </select>
                         </div>
                         <div class="form-group" id="notice-form-group" style="display: none;">
@@ -49,12 +49,17 @@
                             <input class="form-control" id="notice_at" name="notice_at" type="date" min=<?= date('Y-m-d', strtotime("+5 days")) ?>></input>
                         </div>
                         <div class="form-group">
-                            <label for="report-address">Action Taken</label>
-                            <textarea class="form-control" id="report-address" placeholder="Enter Action Taken" rows="2" name="detail" required></textarea>
+                            <label for="detail">Obstruction Types</label>
+                            <select class="form-control" id="detail" name="detail" required>
+                                <option value="" disabled selected>Select Type</option>
+                                <option value="ILLEGAL STRUCTURE">ILLEGAL STRUCTURE</option>
+                                <option value="ILLEGAL VENDOR">ILLEGAL VENDOR</option>
+                                <option value="ILLEGAL PARKING">ILLEGAL PARKING</option>
+                            </select>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="display: none;">
                             <label for="images">Select Images</label>
-                            <input type="file" class="form-control-file" id="images" accept="image/*" multiple onchange="previewImages()" name="images[]" required>
+                            <input type="file" class="form-control-file" id="images" accept="image/*" multiple onchange="previewImages()" name="images[]">
                         </div>
                         <div id="imagePreview" class="mt-2"></div>
                         <button type="submit" class="btn btn-primary mt-3"><span class="fas fa-file"></span> Submit Verification</button>

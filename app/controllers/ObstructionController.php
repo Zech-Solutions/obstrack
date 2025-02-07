@@ -220,7 +220,7 @@ class ObstructionController extends Controller
                 continue;
             if ($user['user_id'] == $this->session('user_id'))
                 continue;
-            $this->addNotifAfterActionTaken($user['user_id'], $obstruction_id, $this->getNotifDesc());
+            $this->addNotifAfterActionTaken($user['user_id'], $user['email'], $obstruction_id, $this->getNotifDesc());
         }
     }
 
@@ -238,7 +238,7 @@ class ObstructionController extends Controller
         return '';
     }
 
-    public function addNotifAfterActionTaken($user_id, $obstruction_id, $description = "")
+    public function addNotifAfterActionTaken($user_id, $to, $obstruction_id, $description = "")
     {
         $form = [
             'sender' => $this->session('user_id'),
@@ -248,6 +248,9 @@ class ObstructionController extends Controller
             'created_at' => date("Y-m-d H:i:s"),
         ];
         $this->notification->add($form);
+        $name = $this->session('first_name') . " " . $this->session('last_name');
+        $from = $this->session('email');
+        $this->sendEmail($name, $from, $to, "Action Taken", $description);
     }
 
 
@@ -302,6 +305,9 @@ class ObstructionController extends Controller
         $uploadDir = "../public/images/obstructions";
         $uploadedImages = [];
         $file_images = $this->files("images");
+
+        if (empty($file_images['tmp_name'][0]))
+            return [];
         try {
 
             foreach ($file_images["tmp_name"] as $key => $tmp_name) {
