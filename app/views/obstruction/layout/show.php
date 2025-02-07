@@ -47,7 +47,8 @@
     $(document).ready(function() {
         new DataTable('#example', {
             paging: false, // Disable pagination
-            searching: false // Disable search box
+            searching: false, // Disable search box
+            info: false
         });
     });
 
