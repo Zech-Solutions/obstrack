@@ -27,8 +27,12 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="report-address">Action Taken</label>
-                    <textarea class="form-control" id="report-address" placeholder="Action Taken" rows="2" name="detail" required></textarea>
+                    <label for="report-address">Action Taken</label> <select class="form-control" id="detail" name="detail" required>
+                        <option value="" disabled selected>Select Type</option>
+                        <option value="Remove Structure">Remove Structure</option>
+                        <option value="Remove Vendor">Remove Vendor</option>
+                        <option value="Remove Parking">Remove Parking</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="images">Select Images</label>

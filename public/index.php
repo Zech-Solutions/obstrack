@@ -119,3 +119,19 @@ function badgeStatus($status){
 
     return $status_badge;
 }
+
+function labelStatus($status){
+    if ($status == 'COMPLETED') {
+        $status_badge = '<span class="text-success">Resolved</span>';
+    } else if ($status == 'WIP') {
+        $status_badge = '<span class="text-warning">Work in Progress</span>';
+    } else if ($status == 'VERIFIED') {
+        $status_badge = '<span class="text-success">Verified</span>';
+    } else if ($status == 'REJECTED') {
+        $status_badge = '<span class="text-danger">Rejected</span>';
+    } else {
+        $status_badge = '<span class="text-danger">Pending</span>';
+    }
+
+    return $status_badge;
+}

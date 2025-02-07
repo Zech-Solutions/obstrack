@@ -182,7 +182,8 @@ class ApiController extends Controller
     public function addObstruction()
     {
         $images = $this->processReportImages();
-        if(count($images) < 1)
+        $sender = $this->user->find($this->input('reported_by'));
+        if (count($images) < 1)
             return [
                 'status' => 'no-media',
                 'obstruction_id' => 0
@@ -205,12 +206,12 @@ class ApiController extends Controller
 
             $brgys = $this->user->filter(['brgy_id' => $this->input('brgy_id')]);
             foreach ($brgys as $row) {
-                $this->addNotifAfterObstructionCreated($row['user_id'], $obstruction_id);
+                $this->addNotifAfterObstructionCreated($row, $sender, $obstruction_id);
             }
 
             $roots = $this->user->filter(['role' => 'ROOT']);
             foreach ($roots as $row) {
-                $this->addNotifAfterObstructionCreated($row['user_id'], $obstruction_id);
+                $this->addNotifAfterObstructionCreated($row, $sender, $obstruction_id);
             }
         }
         return [
@@ -219,8 +220,14 @@ class ApiController extends Controller
         ];
     }
 
-    public function addNotifAfterObstructionCreated($user_id, $obstruction_id)
+    public function addNotifAfterObstructionCreated($receiver, $sender, $obstruction_id)
     {
+
+        $name = $sender['first_name'] . " " . $sender['last_name'];
+        $from = $sender['email'];
+        $user_id = $receiver['user_id'];
+        $to = $receiver['email'];
+
         $form = [
             'sender' => $this->input('reported_by'),
             'receiver' => $user_id,
@@ -229,6 +236,7 @@ class ApiController extends Controller
             'created_at' => date("Y-m-d H:i:s"),
         ];
         $this->notification->add($form);
+        $this->sendEmail($name, $from, $to, "New Obstruction", "New obstruction was reported by citizen.");
     }
 
     function processReportImages()

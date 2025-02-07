@@ -36,7 +36,10 @@ if (!isset($_SESSION[SYSTEM]['user_id'])) {
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <a class="navbar-brand" href="#"><?= SYSTEM_NAME ?></a>
+        <a class="navbar-brand" href="#">
+            <img src="<?= URL_PUBLIC ?>/images/login.png" alt="sdfs" height="60">
+            <?= SYSTEM_NAME ?>
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -90,6 +93,7 @@ if (!isset($_SESSION[SYSTEM]['user_id'])) {
     </nav>
 
     <div class="container">
+        <div style="margin-top: 120px;"></div>
         <?php require_once $view; ?>
     </div>
 </body>
