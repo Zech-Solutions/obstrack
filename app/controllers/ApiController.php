@@ -236,7 +236,9 @@ class ApiController extends Controller
             'created_at' => date("Y-m-d H:i:s"),
         ];
         $this->notification->add($form);
-        $this->sendEmail($name, $from, $to, "New Obstruction", "New obstruction was reported by citizen.");
+        if ($to != "" && $from != "") {
+            $this->sendEmail($name, $from, $to, "New Obstruction", "New obstruction was reported by citizen.");
+        }
     }
 
     function processReportImages()

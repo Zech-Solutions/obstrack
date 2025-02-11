@@ -247,9 +247,9 @@ class ObstructionController extends Controller
         ];
         $this->notification->add($form);
 
-        if ($to != "") {
-            $name = $this->session('first_name') . " " . $this->session('last_name');
-            $from = $this->session('email');
+        $name = $this->session('first_name') . " " . $this->session('last_name');
+        $from = $this->session('email');
+        if ($to != "" && $from != "") {
             $this->sendEmail($name, $from, $to, "Action Taken", $description);
         }
     }
