@@ -18,9 +18,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <p class="card-text">
-                            Detail: <?= $obstruction['detail'] ?><br>
                             Location: <?= $obstruction['street'] ?>, <?= $obstruction['brgy']['name'] ?><br>
-                            Landmark: <?= $obstruction['landmarks'] ?>
                         </p>
                         <div>
                             <p>Attachments</p>
@@ -109,9 +107,21 @@
 
             $("#notice-form-group").fadeIn();
             $("#notice_at").prop("required", true);
+
+            $("#detail").html(`
+                <option value="" disabled selected>Select Type</option>
+                <option value="ILLEGAL STRUCTURE">ILLEGAL STRUCTURE</option>
+                <option value="ILLEGAL VENDOR">ILLEGAL VENDOR</option>
+                <option value="ILLEGAL PARKING">ILLEGAL PARKING</option>
+            `);
         } else {
             $("#notice-form-group").fadeOut();
             $("#notice_at").prop("required", false);
+            $("#detail").html(`
+                <option value="" disabled selected>Select Type</option>
+                <option value="INVALID REPORT">INVALID REPORT</option>
+                <option value="NO OBSTRUCTION">NO OBSTRUCTION</option>
+            `);
         }
     }
 </script>
