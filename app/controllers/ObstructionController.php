@@ -194,14 +194,12 @@ class ObstructionController extends Controller
         }
 
         if ($this->obstructionAction->add($form)) {
-
-            $this->prepareNotif();
-
             $this->session_put('success', 'Successfully taken action');
             $form = [
                 'status' => $this->input('status')
             ];
             $this->obstruction->edit($form, $this->input('obstruction_id'));
+            $this->prepareNotif();
         } else {
             $this->session_put('error', 'Error while reporting');
         }
@@ -220,7 +218,9 @@ class ObstructionController extends Controller
                 continue;
             if ($user['user_id'] == $this->session('user_id'))
                 continue;
-            $this->addNotifAfterActionTaken($user['user_id'], $user['email'], $obstruction_id, $this->getNotifDesc());
+            if ($user['email'] != "") {
+                $this->addNotifAfterActionTaken($user['user_id'], $user['email'], $obstruction_id, $this->getNotifDesc());
+            }
         }
     }
 

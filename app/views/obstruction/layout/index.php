@@ -36,7 +36,6 @@
                     <p class="card-text">
                         <?= $row['detail'] ?><br>
                         <strong>Location</strong>: <?= $row['street'] . ", " . $row['brgy']['name'] ?> <br>
-                        <strong>Landmark</strong>: <?= $row['landmarks'] ?> <br>
                     </p>
                     <div class="rb-container">
                         <h6>Timeline</h6>
