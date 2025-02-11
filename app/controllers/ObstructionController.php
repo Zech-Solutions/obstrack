@@ -218,9 +218,7 @@ class ObstructionController extends Controller
                 continue;
             if ($user['user_id'] == $this->session('user_id'))
                 continue;
-            if ($user['email'] != "") {
-                $this->addNotifAfterActionTaken($user['user_id'], $user['email'], $obstruction_id, $this->getNotifDesc());
-            }
+            $this->addNotifAfterActionTaken($user['user_id'], $user['email'], $obstruction_id, $this->getNotifDesc());
         }
     }
 
@@ -248,9 +246,12 @@ class ObstructionController extends Controller
             'created_at' => date("Y-m-d H:i:s"),
         ];
         $this->notification->add($form);
-        $name = $this->session('first_name') . " " . $this->session('last_name');
-        $from = $this->session('email');
-        $this->sendEmail($name, $from, $to, "Action Taken", $description);
+
+        if ($to != "") {
+            $name = $this->session('first_name') . " " . $this->session('last_name');
+            $from = $this->session('email');
+            $this->sendEmail($name, $from, $to, "Action Taken", $description);
+        }
     }
 
 
