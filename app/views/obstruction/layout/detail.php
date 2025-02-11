@@ -30,7 +30,6 @@ usort($actions, function ($a, $b) {
                 <p class="card-text">
                     <?= $obstruction['detail'] ?><br>
                     <strong>Location</strong>: <?= $obstruction['street'] . ", " . $obstruction['brgy']['name'] ?> <br>
-                    <strong>Landmark</strong>: <?= $obstruction['landmarks'] ?> <br>
                 </p>
                 <div class="rb-container">
                     <h6>Timeline</h6>
