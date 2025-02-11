@@ -46,7 +46,7 @@
                         </div>
                         <div class="form-group" id="notice-form-group" style="display: none;">
                             <label for="notice_at">Notice Date</label>
-                            <input class="form-control" id="notice_at" name="notice_at" type="date" min=<?= date('Y-m-d', strtotime("+5 days")) ?>></input>
+                            <input class="form-control" id="notice_at" name="notice_at" type="date" min=<?= date('Y-m-d') ?>></input>
                         </div>
                         <div class="form-group">
                             <label for="detail">Obstruction Types</label>
